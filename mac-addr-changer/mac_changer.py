@@ -1,5 +1,8 @@
 import subprocess
 import optparse
+import re
+
+MAC_ADDR_REGEXP = "[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}"
 
 
 def get_arguments():
@@ -22,5 +25,26 @@ def change_mac(interface, new_mac_addr):
     subprocess.call(['sudo', 'ip', 'link', 'set', 'dev', interface, 'up'])
 
 
-options = get_arguments()
-change_mac(options.interface, options.new_mac)
+def get_current_mac(interface):
+    result = str(subprocess.check_output(['ip', 'link', 'show', interface]))
+    matches = re.search(MAC_ADDR_REGEXP, result)
+    if not matches:
+        print('[-] Could not read MAC address.')
+        return None
+
+    return matches.group(0)
+
+
+if __name__ == '__main__':
+    options = get_arguments()
+    current_mac = get_current_mac(options.interface)
+    if not current_mac:
+        exit(1)
+
+    print('Current MAC = ' + current_mac)
+    change_mac(options.interface, options.new_mac)
+    current_mac = get_current_mac(options.interface)
+    if current_mac == options.new_mac:
+        print('[+] MAC address was successfully changed to ' + current_mac)
+    else:
+        print('[-] MAC address did not get changed')
