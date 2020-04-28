@@ -1,15 +1,15 @@
 import subprocess
-import optparse
+import argparse
 import re
 
 MAC_ADDR_REGEXP = "[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}"
 
 
 def get_arguments():
-    parser = optparse.OptionParser()
-    parser.add_option('-i', '--interface', dest="interface", help='Interface to change its MAC')
-    parser.add_option('-m', '--mac', dest="new_mac", help='New MAC address')
-    (options_from_parser, arguments) = parser.parse_args()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-i', '--interface', dest="interface", help='Interface to change its MAC')
+    parser.add_argument('-m', '--mac', dest="new_mac", help='New MAC address')
+    options_from_parser = parser.parse_args()
     if not options_from_parser.interface:
         parser.error('[-] Please specify an interface, use --help for more info.')
     if not options_from_parser.new_mac:
