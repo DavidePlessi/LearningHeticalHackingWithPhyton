@@ -1,9 +1,19 @@
 import scapy.all as scapy
 import network_scanner as network_scanner
 import time
+import argparse
 
-t_target_ip = '10.0.2.15'
-t_gateway_ip = '10.0.2.1'
+
+def get_arguments():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-t', '--target-ip', dest="target_ip", help='Target ip')
+    parser.add_argument('-r', '--route-ipr', dest="router_ip", help='Router ip')
+    options_from_parser = parser.parse_args()
+    if not options_from_parser.target_ip:
+        parser.error('[-] Please specify a target ip, use --help for more info.')
+    if not options_from_parser.router_ip:
+        parser.error('[-] Please specify a router ip, use --help for more info.')
+    return options_from_parser
 
 
 def get_mac(ip):
@@ -44,6 +54,10 @@ def stop_attack(target_ip, gateway_ip, verbose=True):
 
 
 if __name__ == '__main__':
+    options = get_arguments()
+    t_target_ip = options.target_ip
+    t_gateway_ip = options.router_ip
+
     try:
         start_attack(t_target_ip, t_gateway_ip)
     except KeyboardInterrupt:
