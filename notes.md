@@ -17,6 +17,7 @@ arpspoof -i eth0 -t 10.0.2.7 10.0.2.1
 arpspoof -i eth0 -t 10.0.2.1 10.0.2.7
 
 echo 1 > /proc/sys/net/ipv4/ip_forward
+sudo bash -c 'echo 1 > /proc/sys/net/ipv4/ip_forward'
 ```
 ## NET CUT
 ```
